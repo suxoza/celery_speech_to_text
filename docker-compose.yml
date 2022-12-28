@@ -1,0 +1,41 @@
+version: "3.7"
+services:
+
+  fastapi:
+    build: ./app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rabbitmq
+      - mongo_server
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=pass
+
+  rabbitmq:
+    hostname: rabbitmq
+    image: "rabbitmq:3-management" 
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=pass
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  mongo_server:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  simple_worker:
+    build: './simple_worker'
+    user: nobody
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=pass
+    depends_on:
+      - rabbitmq
+      - fastapi
+      - mongo_server
+
+

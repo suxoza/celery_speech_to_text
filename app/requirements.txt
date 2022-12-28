@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+celery[mongodb]
+boto3
+pymongo
+poetry
+gevent
+gunicorn
+PyJWT
+pydantic
+python-multipart
