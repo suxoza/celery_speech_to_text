@@ -21,7 +21,7 @@ async def user_login(user: UserLoginSchema = Body(...)):
 
 @app.post("/upload_file/", dependencies=[Depends(JWTBearer())])
 async def upload_file(file: UploadFile):
-    if file.content_type not in ['audio/wav']:
+    if file.content_type not in ['audio/wav', 'audio/x-wav'] and not file.filename.endswith('.wav'):
         raise HTTPException(400, detail="Invalid File Format")
 
     byte = base64.b64encode(file.file.read())
